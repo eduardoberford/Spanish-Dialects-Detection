@@ -17,10 +17,6 @@ fold_label = {
     'gl_texts' : 2,
     'an_texts' : 3,
     'lad_texts' : 4,
-    #'ca_texts' : 5,
-    #'es_texts' : 6,
-
-
 }
 dial_label = {
     0 : 'AST',
@@ -28,8 +24,6 @@ dial_label = {
     2 : 'GL',
     3 : 'AN',
     4 : 'LAD',
-    #5 : 'CA',
-    #6 : 'ES',
 }
 
 # create training dataset
@@ -130,26 +124,8 @@ df = pd.DataFrame({'text': X_train, 'label': y_train}, index=None)
 
 df["text"] = df['text'].apply(lambda x: ''.join(x.text))
 
-# pms documents have a lot of these
-df["text"] = df['text'].apply(lambda x: x.replace("http://www.sil.org/iso639-3/documentation.asp?id=", ""))
-# other minor corrections
-df['text'] = df['text'].apply(lambda x: x.replace("&lt;br clear=all&gt;", ""))
-df['text'] = df['text'].apply(lambda x: x.replace("Evulusiù demogràfica.", ""))
-df['text'] = df['text'].apply(lambda x: x.replace("&lt;br&gt;&lt;br&gt;", ""))
-df['text'] = df['text'].apply(lambda x: x.replace("ł", "l"))
-
-df['text'] = df['text'].apply(lambda x: x.replace("&lt;br clear=all&gt;", ""))
-df['text'] = df['text'].apply(lambda x: x.replace("Evulusiù demogràfica.", ""))
-df['text'] = df['text'].apply(lambda x: x.replace("&lt;br&gt;&lt;br&gt;", ""))
-df['text'] = df['text'].apply(lambda x: x.replace("ł", "l"))
-df['text'] = df['text'].apply(lambda x: x.replace("Ł", "l"))
-
 df["text"] = df['text'].apply(lambda x: np.nan if len(x)<=20 else x)
 df.dropna(inplace=True)
-
-df.loc[df['label'] == 2, 'text'] = df.loc[df['label'] == 2, 'text'].apply(lambda x: np.nan if ("grup ëd popolassion." in x or "A confin-a con " in x or "a l’é na comun-a ëd" in x or "con na densità" in x or "A së stend" in x or "As dëstend për" in x or "a l'é na comun" in x or "La lenga" in x or "Në schema" in x or "Ël sìndich a l'é" in x or "a l'é un comun" in x) else x)
-df.loc[df['label'] == 6, 'text'] = df.loc[df['label'] == 6, 'text'].apply(lambda x: np.nan if ("La Stazzion de" in x or "El cumün" in x or "a l'è una cità" in x or "El Passaport" in x or "la se tróa a 'na" in x or "a l'è 'na ferrovia" in x or "L'è taccada a stazione di" in x or "La a l'è 'na strada" in x or "L'andament del numer de abitant" in x or "L'andament del nömer dei abitàncc" in x or "l'è menziunaa la prima volta" in x or "l'è 'na stazion de la" in x or "L'andamènt del nömer dei abitàncc" in x or "La Stazion de" in x or "El Distret" in x or "El cümü" in x or "km²" in x or "Al gh’ha pressapoch abitant" in x or "l'è un cumün" in x or "El cumün de" in x or "El cunfìna coi cümü" in x or "l'è un cümü" in x or "l'è 'n cümü" in x or "e 'na densità de" in x) else x)
-df.loc[df['label'] == 9, 'text'] = df.loc[df['label'] == 9, 'text'].apply(lambda x: np.nan if ("el xe on comun de" in x or "el xe un comun" in x or "gregorian" in x) else x)
 
 df.dropna(inplace=True)
 df.drop_duplicates(subset ='text', keep = False, inplace = True) 
